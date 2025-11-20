@@ -1,0 +1,139 @@
+📁Struttura del Progetto Java
+
+Il tuo progetto dovrà contenere una cartella principale (ad esempio, TextAdventure) che include la cartella src con tutti i file sorgente.
+
+TextAdventure/
+├── src/
+│   └── java/
+│       ├── Main.java           <-- (Ciclo principale, Scanner)
+│       ├── Gioco.java          <-- (Logica di gioco, gestione coda nemici)
+│       ├── Giocatore.java      <-- (Dati e azioni del giocatore)
+│       ├── Nemico.java         <-- (Dati e azioni del nemico)
+│       └── Oggetto.java        <-- (Dati e effetti degli oggetti)
+└── Descrizione.txt             <-- (File di consegna 2)
+
+💻 Dettaglio Classi e Requisiti
+
+Di seguito trovi i dettagli su come implementare le classi per soddisfare i Requisiti Minimi e l'uso delle collezioni.
+
+1. Oggetto.java
+
+Questa classe è fondamentale, soprattutto per l'estensione degli oggetti con effetto e la corretta gestione dello zaino.
+
+    Campi:
+
+        private String nome;
+
+        private int valoreEffetto; (Es: +20 HP per una pozione, +5 danno per un'arma)
+
+    Requisito chiave: Per garantire che lo Zaino non contenga duplicati (usando un Set), devi sovrascrivere i metodi equals() e hashCode()!
+    Java
+
+    // L'uguaglianza si basa solo sul nome dell'oggetto
+    @Override
+    public boolean equals(Object o) { ... }
+    @Override
+    public int hashCode() { ... }
+
+2. Nemico.java
+
+Rappresenta un singolo avversario.
+
+    Campi:
+
+        private String nome;
+
+        private int puntiVita;
+
+        private int dannoAttacco;
+
+    Metodi chiave:
+
+        public void riceviDanno(int danno): Sottrae il danno subito dai PV.
+
+        public boolean isSconfitto(): Restituisce true se puntiVita <= 0.
+
+        (Per l'estensione Nemici élite): Dovrai implementare l'interfaccia Comparable<Nemico> per usare PriorityQueue.
+
+3. Giocatore.java
+
+Rappresenta l'eroe che gioca.
+
+    Campi:
+
+        private int puntiVita;
+
+        private int dannoBase; (o un danno calcolato in base all'arma)
+
+        Zaino (Set): private Set<Oggetto> zaino; (Usa HashSet per prevenire duplicati.)
+
+        (Per l'estensione Mini-inventario avanzato): private final int MAX_CAPACITY = 5;
+
+    Metodi chiave:
+
+        public void attacca(Nemico nemico)
+
+        public boolean raccogliOggetto(Oggetto o): Tenta di aggiungere l'oggetto allo zaino e gestisce il messaggio in caso di duplicato.
+
+4. Gioco.java
+
+Contiene la logica centrale, le collezioni principali e la gestione dei turni.
+
+    Campi:
+
+        private Giocatore giocatore;
+
+        Coda Nemici (Queue): private Queue<Nemico> codaNemici; (Usa LinkedList<Nemico> o PriorityQueue<Nemico>).
+
+        private int nemiciSconfitti;
+
+    Metodi chiave:
+
+        public void iniziaPartita(): Inizializza il giocatore e carica la coda con almeno 5 nemici diversi.
+
+        public Nemico getNemicoAttuale(): Restituisce il nemico in cima alla coda (usa peek()).
+
+        public void stampaNemicoAttuale(): Metodo suggerito per la leggibilità.
+
+        public void attaccaNemico(): Contiene la logica di attacco, verifica la sconfitta e usa poll() per rimuovere il nemico e passare al successivo.
+
+        public void mostraRiepilogoFinale(): Stampa il punteggio, PV rimanenti, ecc.
+
+        public boolean isPartitaFinita(): Controlla le tre condizioni di fine partita (vittoria, sconfitta, fuga).
+
+5. Main.java
+
+Il punto di ingresso del programma.
+
+    Implementa: Menu interattivo con Scanner e ciclo principale.
+
+    Logica:
+    Java
+
+    public static void main(String[] args) {
+        Gioco gioco = new Gioco();
+        Scanner scanner = new Scanner(System.in);
+        gioco.iniziaPartita();
+
+        // Ciclo principale di gioco
+        while (!gioco.isPartitaFinita()) {
+            gioco.stampaNemicoAttuale();
+            // Stampa il menu (1.Attacca, 2.Raccogli, 3.Zaino, 4.Fuggi)
+            int scelta = scanner.nextInt();
+
+            switch (scelta) { // REQUISITO: usa switch/case
+                case 1:
+                    gioco.attaccaNemico();
+                    break;
+                case 2:
+                    // Logica per trovare un oggetto casuale e raccoglierlo
+                    break;
+                // ... altri case per 3 e 4
+                default:
+                    // Gestione scelta non valida
+            }
+        }
+        gioco.mostraRiepilogoFinale();
+    }
+
+Seleziona un'estensione o un requisito specifico (ad esempio, come implementare l'uso del Set per lo zaino o la PriorityQueue per i nemici élite) e posso fornirti un esempio di codice.
