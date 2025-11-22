@@ -1,0 +1,53 @@
+The 4 Steps of Manual Compilation
+1.
+Write Code (.java files)
+
+What it is: You write your program's logic in human-readable files with a .java extension.
+
+Why: This is the source and the blueprint for your application.
+
+2. Gather Dependencies (.jar files)
+Your code imports Lanterna, so you must provide that library. You did this by downloading its JAR file.
+
+Example: The Lanterna library file.
+
+Path: my-app/lib/lanterna-3.1.1.jar
+
+Command to get it:
+Shell Script
+# This command downloads the JAR into your 'lib' folder.
+wget -P my-app/lib https://repo1.maven.org/maven2/com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar
+
+3. Compile (javac command)
+You translate your human-readable .java files into machine-readable .class files.
+
+Command:
+Shell Script
+javac -d my-app/bin -cp "my-app/lib/lanterna-3.1.1.jar" my-app/src/main/java/*.java
+
+Explanation:
+
+javac: The compiler.
+
+-d my-app/bin: "Place the compiled .class files into the my-app/bin directory."
+
+-cp "my-app/lib/lanterna-3.1.1.jar": "While compiling, look inside this JAR file to find the Lanterna code you imported."
+
+my-app/src/main/java/*.java: "Compile every .java file in the source directory."
+
+4. Run (java command)
+You execute the compiled code to start your game.
+
+Command:
+Shell Script
+java -cp "my-app/bin:my-app/lib/lanterna-3.1.1.jar" main
+
+Explanation:
+
+java: The Java runtime.
+
+-cp "my-app/bin:my-app/lib/lanterna-3.1.1.jar": "To run this program, find the necessary classes in two places:
+    a. my-app/bin (for your own compiled code like main.class, Player.class, etc.)
+    b. my-app/lib/lanterna-3.1.1.jar (for the library code)."
+
+main: "The name of the class to start with (e.g., main.class becomes main)."
